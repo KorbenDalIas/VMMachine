@@ -1,0 +1,208 @@
+﻿<Window x:Class="VendingMachine.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VendingMachine"
+        mc:Ignorable="d"
+        Title="VendingMachine" Height="600" Width="800" MaxHeight="600" MaxWidth="800" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="VMLabelDefault" TargetType="{x:Type Label}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="40"/>
+        </Style>
+        <Style x:Key="UserPurseLabelDefault" TargetType="{x:Type Label}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="25"/>
+        </Style>
+        <Style x:Key="LabelsVMChangeDefault" TargetType="{x:Type Label}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+        <Style x:Key="UserPurseTextBlockDefault" TargetType="{x:Type TextBlock}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="MinWidth" Value="50"/>
+            <Setter Property="Margin" Value="15"/>
+        </Style>
+        <Style x:Key="TextBlocksDefault" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="MinWidth" Value="120"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        <Style x:Key="TextBlocksUserPurse" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="MinWidth" Value="90"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        <Style x:Key="TextBlocksChange" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        <Style x:Key="TextBlocksVMPurse" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="MinWidth" Value="90"/>
+        </Style>
+        <Style x:Key="LabelsDefault" TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="MinWidth" Value="132"/>
+        </Style>
+        <Style x:Key="ButtonBuy" TargetType="{x:Type Button}">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Width" Value="auto"/>
+        </Style>
+        <Style TargetType="ListViewItem">
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="IsSelected" Value="True"/>
+
+                </Trigger>
+            </Style.Triggers>
+            <EventSetter Event="PreviewGotKeyboardFocus" Handler="SelectCurrentItem"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+            <Label x:Name="VMName" Style="{StaticResource VMLabelDefault}" Grid.Column="1" Content="Vending Machine"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.2*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Style="{StaticResource LabelsDefault}" Content="Prosuct Name"/>
+                <Label Grid.Column="1" Style="{StaticResource LabelsDefault}" Content="Cost"/>
+                <Label Grid.Column="2" Style="{StaticResource LabelsDefault}" Content="Amount"/>
+            </Grid>
+            <ListView x:Name="AssortmentListView" ItemsSource="{Binding Items}" Grid.Row="1" SelectionMode="Single">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="ProductNameTxtBox" Style="{StaticResource TextBlocksDefault}" Text="{Binding ProductName}"/>
+                            <TextBlock x:Name="ProductCostTxtBox" Style="{StaticResource TextBlocksDefault}" Text="{Binding ProductCost}"/>
+                            <TextBlock x:Name="ProductAmountTxtBox" Style="{StaticResource TextBlocksDefault}" Text="{Binding ProductAmount}"/>
+                            <Button x:Name="BuyButton" Style="{StaticResource ButtonBuy}" Content="Купить" Click="BuyButton_Click" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.3*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Balance = " HorizontalAlignment="Right" Style="{StaticResource UserPurseLabelDefault}"/>
+                    <TextBlock x:Name="BalanceTextblock" Grid.Column="1" HorizontalAlignment="Left" Text="0" FontSize="22" VerticalAlignment="Center" />
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.2*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Nominal Value"/>
+                        <Label Grid.Column="1" Content="Bills Amount"/>
+                    </Grid>
+                    <ListView x:Name="UserPurseListView" Grid.Row="1" SelectionMode="Single">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="NominalValueUserPurseTxtBox" Style="{StaticResource UserPurseTextBlockDefault}" Text="{Binding NominalValue}" />
+                                    <TextBlock x:Name="NumberOfBillsUserPurseTxtBox" Style="{StaticResource UserPurseTextBlockDefault}" Text="{Binding NumberOfBills}"/>
+                                    <Button x:Name="AddMoneytoBalance" Style="{StaticResource ButtonBuy}" Content="Добавить" Click="AddMoneytoBalance_Click"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.3*"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label x:Name="VMNominalValueLabel" Content="Nominal Value"/>
+                    <Label x:Name="VMNumberOfBillsLabel" Grid.Column="1" Content="Bills Amount"/>
+                </Grid>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="0.8*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.4*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label  Style="{StaticResource LabelsVMChangeDefault}" Content="NominalValue"/>
+                    <Label Grid.Column="1" Style="{StaticResource LabelsVMChangeDefault}" Content="Bills Amount"/>
+                </Grid>
+                <ListView x:Name="VMChangeListView" Grid.Row="1" SelectionMode="Single">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock x:Name="VMChangeNominalValueTxtBox" Style="{StaticResource TextBlocksVMPurse}" Text="{Binding NominalValue}" />
+                                <TextBlock x:Name="VMChangeNumberOfBillsTxtBox" Style="{StaticResource TextBlocksVMPurse}" Text="{Binding NumberOfBills}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+           
+            <Button x:Name="ChangeGiving" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource ButtonBuy}" Content="Give change" Click="ChangeGiving_Click"/>
+        </Grid>
+    </Grid>
+</Window>
